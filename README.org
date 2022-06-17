@@ -1,0 +1,45 @@
+#+TITLE: Advanced Functional Programming in Haskell - Graham Hutton - Sudoku game[[https://youtu.be/glog9DZh8G0][ Link]]
+#+AUTHOR: Firwanaa
+#+PROPERTY: header-args :tangle code.hs
+#+auto_tangle: t
+#+STARTUP: showeverything
+
+* TABLE OF CONTENTS :toc:
+- [[#imports][Imports]]
+- [[#basic-declaration][Basic declaration]]
+- [[#basic-definitions][Basic definitions]]
+
+* Imports
+#+begin_src haskell
+import Data.List
+#+end_src
+* Basic declaration
+#+begin_src haskell
+-- two dimensional data structure in haskell
+type Grid = Matrix Value
+type Matrix a = [Row a]
+type Row a = [a]
+type Value = Char
+
+-- easier way
+-- type Grid = [[Char]]
+
+balnk :: Grid
+blank :: replicate 9 (replicate 9 '.')
+#+end_src
+
+* Basic definitions
+No duplicates in any row, columns or box
+#+begin_src haskell
+rows :: Matrix a -> [Row a]
+rows  = id -- using identity function `id x = x`
+-- property: row . row = id
+
+cols :: Matrix a -> [Row a]
+cols = transpose
+-- property: cols . cols = id
+
+boxs :: Matrix a -> [Row a]
+
+-- property: boxs . boxs = id
+#+end_src
