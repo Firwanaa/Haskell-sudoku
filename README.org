@@ -11,6 +11,7 @@
 - [[#basic-definitions][Basic definitions]]
 - [[#valid-grid][Valid grid]]
 - [[#basic-solver][Basic solver]]
+- [[#pruning-the-search-space][Pruning the search space]]
 
 * Imports
 #+begin_src haskell
@@ -171,4 +172,21 @@ collapse              =  cp . map cp -- collapse matrix = cp (map cp matrix)
 solve :: Grid -> [Grid]
 solve = filter valid . collapse . choices -- using function composition
 -- solve grid = filter valid (collapse (choices g))
+#+end_src
+
+* Pruning the search space
+#+begin_src haskell
+prune  :: Matix Choices -> Matrix Choices
+prune  = pruneBy boxes . pruneBy cols . pruneBy rows
+        where pruneBy f = f . map .reduce . f
+
+reudce     :: Row Choices -> Row Choices
+reduce xss = [xs `minus` singles | xs <- xss]
+             where singles = concat (filter single xss)
+
+minus :: Choices -> Choices -> Choices
+xs `minus` ys = if single xs then xs else xs \\ ys
+
+solve2                :: Grid -> [Grid]
+solve2                =  filter valid . collapse . prune . choices
 #+end_src

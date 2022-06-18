@@ -140,3 +140,17 @@ collapse              =  cp . map cp -- collapse matrix = cp (map cp matrix)
 solve :: Grid -> [Grid]
 solve = filter valid . collapse . choices -- using function composition
 -- solve grid = filter valid (collapse (choices g))
+
+prune  :: Matix Choices -> Matrix Choices
+prune  = pruneBy boxes . pruneBy cols . pruneBy rows
+        where pruneBy f = f . map .reduce . f
+
+reudce     :: Row Choices -> Row Choices
+reduce xss = [xs `minus` singles | xs <- xss]
+             where singles = concat (filter single xss)
+
+minus :: Choices -> Choices -> Choices
+xs `minus` ys = if single xs then xs else xs \\ ys
+
+solve2                :: Grid -> [Grid]
+solve2                =  filter valid . collapse . prune . choices
