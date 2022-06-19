@@ -141,11 +141,11 @@ solve :: Grid -> [Grid]
 solve = filter valid . collapse . choices -- using function composition
 -- solve grid = filter valid (collapse (choices g))
 
-prune  :: Matix Choices -> Matrix Choices
-prune  = pruneBy boxes . pruneBy cols . pruneBy rows
-        where pruneBy f = f . map .reduce . f
+prune  :: Matrix Choices -> Matrix Choices
+prune  = pruneBy boxs . pruneBy cols . pruneBy rows
+        where pruneBy f = f . map reduce . f
 
-reudce     :: Row Choices -> Row Choices
+reduce     :: Row Choices -> Row Choices
 reduce xss = [xs `minus` singles | xs <- xss]
              where singles = concat (filter single xss)
 
