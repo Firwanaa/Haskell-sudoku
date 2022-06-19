@@ -179,3 +179,23 @@ consistent            =  nodups . concat . filter single
 
 blocked               :: Matrix Choices -> Bool
 blocked m             =  void m || not (safe m)
+
+solve4                :: Grid -> [Grid]
+solve4                =  search . prune . choices
+
+search                :: Matrix Choices -> [Grid]
+search m
+ | blocked m          =  []
+ | complete m         =  collapse m
+ | otherwise          =  [g | m' <- expand m
+                            , g  <- search (prune m')]
+
+expand                :: Matrix Choices -> [Matrix Choices]
+expand m              =
+   [rows1 ++ [row1 ++ [c] : row2] ++ rows2 | c <- cs]
+   where
+      (rows1,row:rows2) = break (any (not . single)) m
+      (row1,cs:row2)    = break (not . single) row
+-- Testing
+main                  :: IO ()
+main                  =  putStrLn (unlines (head (solve4 easy)))
