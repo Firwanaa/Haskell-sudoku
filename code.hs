@@ -154,3 +154,10 @@ xs `minus` ys = if single xs then xs else xs \\ ys
 
 solve2                :: Grid -> [Grid]
 solve2                =  filter valid . collapse . prune . choices
+
+solve3                :: Grid -> [Grid]
+solve3                =  filter valid . collapse . fix prune . choices
+
+fix                   :: Eq a => (a -> a) -> a -> a
+fix f x               =  if x == x' then x else fix f x'
+                         where x' = f x

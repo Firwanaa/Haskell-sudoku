@@ -12,6 +12,7 @@
 - [[#valid-grid][Valid grid]]
 - [[#basic-solver][Basic solver]]
 - [[#pruning-the-search-space][Pruning the search space]]
+- [[#repeatedly-pruning][Repeatedly pruning]]
 
 * Imports
 #+begin_src haskell
@@ -189,4 +190,14 @@ xs `minus` ys = if single xs then xs else xs \\ ys
 
 solve2                :: Grid -> [Grid]
 solve2                =  filter valid . collapse . prune . choices
+#+end_src
+
+* Repeatedly pruning
+#+begin_src haskell
+solve3                :: Grid -> [Grid]
+solve3                =  filter valid . collapse . fix prune . choices
+
+fix                   :: Eq a => (a -> a) -> a -> a
+fix f x               =  if x == x' then x else fix f x'
+                         where x' = f x
 #+end_src
