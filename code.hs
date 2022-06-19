@@ -161,3 +161,21 @@ solve3                =  filter valid . collapse . fix prune . choices
 fix                   :: Eq a => (a -> a) -> a -> a
 fix f x               =  if x == x' then x else fix f x'
                          where x' = f x
+
+complete              :: Matrix Choices -> Bool
+complete              =  all (all single)
+
+
+void                  :: Matrix Choices -> Bool
+void                  =  any (any null)
+
+safe                  :: Matrix Choices -> Bool
+safe cm               =  all consistent (rows cm) &&
+                         all consistent (cols cm) &&
+                         all consistent (boxs cm)
+
+consistent            :: Row Choices -> Bool
+consistent            =  nodups . concat . filter single
+
+blocked               :: Matrix Choices -> Bool
+blocked m             =  void m || not (safe m)

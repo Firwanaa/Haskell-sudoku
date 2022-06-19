@@ -13,6 +13,7 @@
 - [[#basic-solver][Basic solver]]
 - [[#pruning-the-search-space][Pruning the search space]]
 - [[#repeatedly-pruning][Repeatedly pruning]]
+- [[#properties-of-matrices][Properties of matrices]]
 
 * Imports
 #+begin_src haskell
@@ -201,3 +202,25 @@ fix                   :: Eq a => (a -> a) -> a -> a
 fix f x               =  if x == x' then x else fix f x'
                          where x' = f x
 #+end_src
+
+* Properties of matrices
+#+begin_src haskell
+complete              :: Matrix Choices -> Bool
+complete              =  all (all single)
+
+
+void                  :: Matrix Choices -> Bool
+void                  =  any (any null)
+
+safe                  :: Matrix Choices -> Bool
+safe cm               =  all consistent (rows cm) &&
+                         all consistent (cols cm) &&
+                         all consistent (boxs cm)
+
+consistent            :: Row Choices -> Bool
+consistent            =  nodups . concat . filter single
+
+blocked               :: Matrix Choices -> Bool
+blocked m             =  void m || not (safe m)
+#+end_src
+
